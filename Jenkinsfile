@@ -20,6 +20,11 @@ node {
         }
     }
 
+    stage('Scan image') {
+
+        ./var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> cbctl_scan.json
+    }
+
     stage('Push image') {
         /* 
 			You would need to first register with DockerHub before you can push images to your account
