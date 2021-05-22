@@ -22,7 +22,9 @@ node {
 
     stage('Scan image') {
         steps{
-        "/var/jenkins_home/app/cbctl image scan 'jbarosin/nodeapp' -o json >> cbctl_scan.json"
+            sh ```#!/bin/sh
+                /var/jenkins_home/app/cbctl image scan 'jbarosin/nodeapp' -o json >> cbctl_scan.json
+            ``` 
         }
     }
 
