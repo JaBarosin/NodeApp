@@ -21,10 +21,8 @@ node {
     }
 
     stage('Scan image') {
-        steps{
-            sh '''#!/bin/bash
-                /var/jenkins_home/app/run_cbctl.sh
-            '''
+        steps {
+            sh '/var/jenkins_home/app/run_cbctl.sh'
         }
     }
 
