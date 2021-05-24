@@ -24,6 +24,7 @@ node {
             sh '/var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
             slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
             sh '/var/jenkins_home/app/cbctl image validate ${IMAGE} -o json >> ${IMAGE}_validate.json' 
+            slackUploadFile filePath: "${IMAGE}_validate.json", initialComment: "Validate results"
         }
     }
 
