@@ -1,6 +1,5 @@
 node {
     def app
-    def statusCode = sh script:script, returnStatus:true
 
     stage('Clone repository') {
         /* Cloning the Repository to our Workspace */
