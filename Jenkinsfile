@@ -23,8 +23,11 @@ node {
             sh '/var/jenkins_home/app/run_cbctl.sh'
             sh '/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
             slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
-            sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate.json' 
-            slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results"
+        }
+
+        stage('Validate image') {
+            sh '/var/jenkins_home/app/cbctl image validate hello-world -o json >> ${REPO}_${IMAGE}_validate.json'
+            slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results" 
         }
     }
 
