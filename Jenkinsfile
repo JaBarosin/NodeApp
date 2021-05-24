@@ -21,7 +21,7 @@ node {
     withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp"]){
         stage('Scan image') {
             sh '/var/jenkins_home/app/run_cbctl.sh'
-            sh '/var/jenkins_home/app/cbctl image scan ${REPO}/{IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
+            sh '/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
             slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
             sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate.json' 
             slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results"
