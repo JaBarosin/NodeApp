@@ -29,13 +29,9 @@ node {
 
         stage('Validate image') {
             echo "Starting validate test for ${REPO}/${IMAGE}"
-            try { 
-                sh '/var/jenkins_home/app/cbctl image validate hello-world -o json >> ${REPO}_${IMAGE}_validate.json'
-               }
-            catch(all) {
-                slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results" 
-                sh "echo 'Failed'"
-            } 
+            sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate_${currentBuild.number}.json'
+            slackUploadFile filePath: "${REPO}_${IMAGE}_validate_${currentBuild.number}.json", initialComment: "Validate results" 
+            sh "echo 'Failed'"
         }
     }
 
