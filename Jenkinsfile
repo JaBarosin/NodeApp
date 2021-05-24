@@ -22,7 +22,7 @@ node {
         stage('Scan image') {
             sh '/var/jenkins_home/app/run_cbctl.sh'
             sh '/var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> /var/jenkins_home/app/logs/${BUILD_NUMBER_SCAN_OUTFILE}'
-            slackUploadFile filePath: "/var/jenkins_home/app/logs/${BUILD_NUMBER_SCAN_OUTFILE}, initialComment: "Build scan results"
+            slackUploadFile filePath: "/var/jenkins_home/app/logs/${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
         }
     }
 
