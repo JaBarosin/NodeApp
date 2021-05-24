@@ -1,6 +1,5 @@
 node {
     def app
-
     stage('Clone repository') {
         /* Cloning the Repository to our Workspace */
 
@@ -19,10 +18,11 @@ node {
             echo "Tests passed"
         }
     }
-
-    stage('Scan image') {
-        sh '/var/jenkins_home/app/run_cbctl.sh'
-        sh '/var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> /var/jenkins_home/app/logs/cbctl_scan_"${currentBuild.number}".json'
+    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json"]){
+        stage('Scan image') {
+            sh '/var/jenkins_home/app/run_cbctl.sh'
+            sh '/var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> /var/jenkins_home/app/logs/${BUILD_NUMBER_SCAN_OUTFILE}'
+        }
     }
 
     stage('Push image') {
