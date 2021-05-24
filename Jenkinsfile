@@ -18,11 +18,12 @@ node {
             echo "Tests passed"
         }
     }
-    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json"]){
+    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "IMAGE=jbarosin/nodeapp"]){
         stage('Scan image') {
             sh '/var/jenkins_home/app/run_cbctl.sh'
             sh '/var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
             slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
+            sh '/var/jenkins_home/app/cbctl image validate ${IMAGE} -o json >> ${IMAGE}_validate.json' 
         }
     }
 
