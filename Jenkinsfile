@@ -1,5 +1,7 @@
 node {
     def app
+    def statusCode = sh script:script, returnStatus:true
+
     stage('Clone repository') {
         /* Cloning the Repository to our Workspace */
 
@@ -26,8 +28,14 @@ node {
         }
 
         stage('Validate image') {
-            sh '/var/jenkins_home/app/cbctl image validate hello-world -o json >> ${REPO}_${IMAGE}_validate.json'
-            slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results" 
+            echo "Starting validate test for ${REPO}/${IMAGE}"
+            try { 
+                sh '/var/jenkins_home/app/cbctl image validate hello-world -o json >> ${REPO}_${IMAGE}_validate.json'
+               }
+            catch(all) {
+                slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results" 
+                sh "echo 'Failed'"
+            } 
         }
     }
 
