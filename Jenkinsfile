@@ -1,51 +1,46 @@
-node {
-    def app
+#!/usr/bin/env groovy
+pipeline {
+    agent any
 
-    stage('Clone repository') {
-        /* Cloning the Repository to our Workspace */
+    environment {
+        IMAGE = "nodeapp"
+	REPO = "jbarosin"
+	TAG = "dp"
+        TEST_CONTAINER = "${env.TEST_PREFIX}-${env.BUILD_NUMBER}"
+        REGISTRY_ADDRESS = "https://registry.hub.docker.com"
 
-        checkout scm
     }
 
-    stage('Build image') {
-        /* This builds the actual image */
+    stages {
 
-        app = docker.build("jbarosin/nodeapp")
-    }
-
-    stage('Test image') {
-        
-        app.inside {
-            echo "Tests passed"
-        }
-    }
-    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp"]){
-        stage('Scan image') {
-            sh '/var/jenkins_home/app/run_cbctl.sh'
-            sh '/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
-            slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+        stage("Build image") {
+            steps {
+                sh "docker build . -t ${REPO}/${IMAGE}:${TAG}"
+                waitUntilServicesReady
+            }
         }
 
-        stage('Validate image') {
-            try {
-                echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-                sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate.json'
-            } 
-            catch (err) { 
-                echo "Build failed. Review Cbctl scan results." 
-                slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for {Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
+        stage("Scan image") {
+            steps {
+                sh "/var/jenkins_home/app/run_cbctl.sh"
+                sh "/var/jenkins_home/app/run_cbctl.sh >> test.txt"
+                waitUntilServicesReady
             }
         }
     }
 
-    stage('Push image') {
-        /* 
-			You would need to first register with DockerHub before you can push images to your account
-		*/
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-            } 
-                echo "Trying to Push Docker Build to DockerHub"
+    post {
+        always {
+            sh "echo 'done!'"
+        }
+
+        success {
+            slackUploadFile filePath: "test.txt", initialComment: "Test declarative pipeline. Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+
+        }
+
+        failure {
+            slackSend "FAILED: : ${env.BUILD_URL}"
+        }
     }
 }
