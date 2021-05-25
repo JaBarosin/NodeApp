@@ -16,7 +16,7 @@ pipeline {
                echo 'Starting build docker image'
                
                script { 
-                def app = docker.build("${REGISTRY_ADDRESS}/${REPO}/${IMAGE}") 
+                  app = docker.build("${REGISTRY_ADDRESS}/${REPO}/${IMAGE}") 
                }
             }
         }
