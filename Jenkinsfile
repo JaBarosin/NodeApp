@@ -23,14 +23,18 @@ node {
         stage('Scan image') {
             sh '/var/jenkins_home/app/run_cbctl.sh'
             sh '/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
-            slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
+            slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
         }
 
         stage('Validate image') {
-            echo "Starting validate test for ${REPO}/${IMAGE}"
-            sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate_${currentBuild.number}.json'
-            slackUploadFile filePath: "${REPO}_${IMAGE}_validate_${currentBuild.number}.json", initialComment: "Validate results" 
-            sh "echo 'Failed'"
+            try {
+                echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_{$IMAGE}_validate_${currentBuild.number}.json"
+                sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate_${currentBuild.number}.json'
+            } 
+            catch (err) { 
+                echo "Build failed. Review Cbctl scan results." 
+                slackUploadFile filePath: "${REPO}_${IMAGE}_validate_${currentBuild.number}.json", initialComment: "Validate results for {Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
+            }
         }
     }
 
