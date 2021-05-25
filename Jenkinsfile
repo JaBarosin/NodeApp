@@ -5,7 +5,7 @@ pipeline {
         IMAGE = "nodeapp"
 	REPO = "jbarosin"
 	TAG = "dp"
-        REGISTRY_ADDRESS = "https://registry.hub.docker.com"
+        REGISTRY_ADDRESS = "registry.hub.docker.com"
 
     }
 
@@ -16,7 +16,7 @@ pipeline {
                echo 'Starting build docker image'
                
                script { 
-                def app = docker.build("${REPO}/${IMAGE}") 
+                def app = docker.build("${REGISTRY_ADDRESS}/${REPO}/${IMAGE}") 
                }
             }
         }
