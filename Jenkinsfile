@@ -5,7 +5,6 @@ pipeline {
         IMAGE = "nodeapp"
 	REPO = "jbarosin"
 	TAG = "dp"
-        TEST_CONTAINER = "${env.TEST_PREFIX}-${env.BUILD_NUMBER}"
         REGISTRY_ADDRESS = "https://registry.hub.docker.com"
 
     }
@@ -32,10 +31,11 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub'){
-                    app.push("${TAG}")  
+                    app.push("${TAG}")
+                    app.push('latest')  
+                          } 
                       } 
-                    } 
-             } 
+                } 
         }
     }
     
