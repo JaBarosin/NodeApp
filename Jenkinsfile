@@ -18,9 +18,9 @@ pipeline {
                
                script { 
                 def app = docker.build("${REPO}/${IMAGE}:${TAG}") 
+               }
             }
         }
-
         stage("Scan image") {
             steps {
                 sh "/var/jenkins_home/app/run_cbctl.sh"
