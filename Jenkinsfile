@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE = "nodeapp"
 	REPO = "jbarosin"
-	TAG = "dp"
+	TAG = "dev-dp"
         REGISTRY_ADDRESS = "registry.hub.docker.com"
 
     }
