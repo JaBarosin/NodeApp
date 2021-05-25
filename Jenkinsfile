@@ -23,7 +23,7 @@ pipeline {
         stage("Scan image") {
             steps {
                 sh "/var/jenkins_home/app/run_cbctl.sh"
-                sh "/var/jenkins_home/app/run_cbctl.sh >> test.txt"
+                sh "/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> cbctl_scan_${REPO}_${IMAGE}_${env.BUILD_NUMBER}.json"
             }
         }
        
