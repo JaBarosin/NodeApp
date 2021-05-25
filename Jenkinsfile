@@ -16,7 +16,7 @@ pipeline {
                echo 'Starting build docker image'
                
                script { 
-                def app = docker.build("${REPO}/${IMAGE}:${TAG}") 
+                def app = docker.build("${REPO}/${IMAGE}") 
                }
             }
         }
@@ -31,10 +31,9 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub'){
-                    app.push("${TAG}")
-                    app.push('latest')  
-                          } 
-                      } 
+                    app.push("${TAG}")  
+                        } 
+                    } 
                 } 
         }
     }
