@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 pipeline {
     agent any
-    def app
     environment {
         IMAGE = "nodeapp"
 	REPO = "jbarosin"
@@ -15,7 +14,10 @@ pipeline {
 
         stage("Build image") {
             steps {
-                app = docker.build("${REPO}/${IMAGE}:${TAG}") 
+               echo 'Starting build docker image'
+               
+               script { 
+                def app = docker.build("${REPO}/${IMAGE}:${TAG}") 
             }
         }
 
@@ -29,9 +31,11 @@ pipeline {
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') 
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub'){
+                    app.push()  
+                      } 
                     } 
-            } 
+             } 
         }
     }
     
