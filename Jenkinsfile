@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 pipeline {
     agent any
-
+    def app
     environment {
         IMAGE = "nodeapp"
 	REPO = "jbarosin"
@@ -15,7 +15,7 @@ pipeline {
 
         stage("Build image") {
             steps {
-                sh "docker build . -t ${REPO}/${IMAGE}:${TAG}"
+                app = docker.build("${REPO}/${IMAGE}:${TAG"} 
             }
         }
 
@@ -25,8 +25,16 @@ pipeline {
                 sh "/var/jenkins_home/app/run_cbctl.sh >> test.txt"
             }
         }
+       
+        stage("Push image") {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') 
+                    } 
+            } 
+        }
     }
-
+    
     post {
         always {
             sh "echo 'done!'"
