@@ -1,5 +1,6 @@
 node {
     def app
+
     stage('Clone repository') {
         /* Cloning the Repository to our Workspace */
 
@@ -18,11 +19,22 @@ node {
             echo "Tests passed"
         }
     }
-    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json"]){
+    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp"]){
         stage('Scan image') {
             sh '/var/jenkins_home/app/run_cbctl.sh'
-            sh '/var/jenkins_home/app/cbctl image scan jbarosin/nodeapp -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
-            slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results"
+            sh '/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
+            slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+        }
+
+        stage('Validate image') {
+            try {
+                echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
+                sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate.json'
+            } 
+            catch (err) { 
+                echo "Build failed. Review Cbctl scan results." 
+                slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for {Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
+            }
         }
     }
 
