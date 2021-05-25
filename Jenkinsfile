@@ -15,7 +15,7 @@ pipeline {
 
         stage("Build image") {
             steps {
-                app = docker.build("${REPO}/${IMAGE}:${TAG}" 
+                app = docker.build("${REPO}/${IMAGE}:${TAG}") 
             }
         }
 
