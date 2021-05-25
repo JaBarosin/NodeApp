@@ -29,7 +29,7 @@ node {
         stage('Validate image') {
             try {
                 echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-                sh '/var/jenkins_home/app/cbctl image validate hello-world -o json >> ${REPO}_${IMAGE}_validate.json'
+                sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json >> ${REPO}_${IMAGE}_validate.json'
             } 
             catch (err) { 
                 echo "Build failed. Review Cbctl scan results." 
