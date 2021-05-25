@@ -37,7 +37,7 @@ pipeline {
         }
 
         failure {
-            slackSend "FAILED: : ${env.BUILD_URL}"
+            slackSend message: "FAILED: ${env.BUILD_URL}"
         }
     }
 }
