@@ -44,7 +44,7 @@ pipeline {
         }
 
         success {
-            slackUploadFile filePath: "cbctl_scan_${REPO}_{$IMAGE}_${env.BUILD_NUMBER}.json", initialComment: "Test declarative pipeline. Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+            slackUploadFile filePath: "cbctl_scan_${REPO}_${IMAGE}_${env.BUILD_NUMBER}.json", initialComment: "Test declarative pipeline. Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
         }
 
         failure {
