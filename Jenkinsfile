@@ -16,7 +16,6 @@ pipeline {
         stage("Build image") {
             steps {
                 sh "docker build . -t ${REPO}/${IMAGE}:${TAG}"
-                waitUntilServicesReady
             }
         }
 
@@ -24,7 +23,6 @@ pipeline {
             steps {
                 sh "/var/jenkins_home/app/run_cbctl.sh"
                 sh "/var/jenkins_home/app/run_cbctl.sh >> test.txt"
-                waitUntilServicesReady
             }
         }
     }
@@ -36,7 +34,6 @@ pipeline {
 
         success {
             slackUploadFile filePath: "test.txt", initialComment: "Test declarative pipeline. Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
-
         }
 
         failure {
