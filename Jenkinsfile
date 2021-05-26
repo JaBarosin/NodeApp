@@ -57,8 +57,8 @@ node {
                 echo "Build failed. Review Cbctl scan results." 
                 sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 
-                withEnv(["CBCTL_RESULTS_OUT=${sh 'cat slack_block.txt'}"]){
-                    
+            SLACK_CBCTL = sh (cat slack_block.txt)
+            echo "Message to send in slack_block: ${SLACK_CBCTL}"
             blocks_fail = [
                     [
                      "type": "section",
@@ -76,13 +76,13 @@ node {
                     "type": "section",
                     "text": [
                             "type": "mrkdwn",
-                            "text": "*${env.JOB_NAME}*\n ${env.CBCTL_RESULTS_OUT}"
+                            "text": "*${env.JOB_NAME}*\n ${SLACK_CBCTL}"
                         ]
                 ]
              ]
 
                    slackSend(channel: "#build-alerts", blocks: blocks_fail)
-                }
+                
                //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
                    slackUploadFile filePath: "slack_block.txt", initialComment: ""
              }
