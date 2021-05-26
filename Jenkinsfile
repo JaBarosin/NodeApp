@@ -40,7 +40,7 @@ node {
                 "type": "section",
          	"text": [
                 	 "type": "mrkdwn",
-                     	 "text": "*${env.JOB_NAME}*\n\n ${CBCTL_RESULTS_OUT}"
+                     	 "text": "*${env.JOB_NAME}*\n\n ${CBCTL_RESULTS}"
 	               	]
         ]
     ]   
@@ -58,7 +58,30 @@ node {
                 sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 
                 withEnv(["CBCTL_RESULTS_OUT=${sh 'cat slack_block.txt'}"]){
-                    slackSend(channel: "#build-alerts", blocks: blocks)
+                    
+            blocks_fail = [
+                    [
+                     "type": "section",
+                     "text": [
+                            "type": "mrkdwn",
+                            "text": "*CBCTL Validate results*\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review in CBC Console>"
+                            ]
+                    ],
+
+                [
+                    "type": "divider"
+                ],
+
+                [
+                    "type": "section",
+                    "text": [
+                            "type": "mrkdwn",
+                            "text": "*${env.JOB_NAME}*\n\n ${CBCTL_RESULTS_OUT}"
+                        ]
+                ]
+             ]
+
+                   slackSend(channel: "#build-alerts", blocks: blocks_fail)
                 }
               //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
             }
