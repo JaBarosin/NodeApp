@@ -76,15 +76,16 @@ node {
                     "type": "section",
                     "text": [
                             "type": "mrkdwn",
-                            "text": "*${env.JOB_NAME}*\n\n ${CBCTL_RESULTS_OUT}"
+                            "text": "*${env.JOB_NAME}*\n ${env.CBCTL_RESULTS_OUT}"
                         ]
                 ]
              ]
 
                    slackSend(channel: "#build-alerts", blocks: blocks_fail)
                 }
-              //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
-            }
+               //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
+                   slackUploadFile filePath: "slack_block.txt", initial Comments: ""
+             }
         }
     }
 
