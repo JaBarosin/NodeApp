@@ -39,7 +39,7 @@ node {
 		"text": [
 			"type": "mrkdwn",
 			"text": "*${env.JOB_NAME}*",
-                        "color": "good"
+                        "color": "#36a64f"
 		]
 	]
 ] 
