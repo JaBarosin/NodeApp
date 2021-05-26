@@ -38,7 +38,7 @@ node {
 		"type": "section",
 		"text": [
 			"type": "mrkdwn",
-			"text": "*${env.JOB_NAME}*",
+			"text": "*No Violations!* :star:",
                         "color": "#36a64f"
 		]
 	]
