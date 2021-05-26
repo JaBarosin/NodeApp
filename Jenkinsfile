@@ -16,7 +16,7 @@ node {
         currentBuild.result = 'FAILURE'
            }
         echo "RESULT: ${currentBuild.result}"
-        logstashSend failBuild: true, maxLines: 10 
+        logstashSend failBuild: true, maxLines: 25 
     }    
 
     stage('Build image') {
