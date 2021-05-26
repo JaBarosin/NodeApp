@@ -21,14 +21,14 @@ node {
         }
     }
     
-    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp"]){
+    withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp", "CBCTL_RESULTS=testing"]){
         
     blocks = [
 	        [
         	 "type": "section",
            	 "text": [
                       	"type": "mrkdwn",
-                       	"text": "*CBCTL Validate results*"
+                       	"text": "*CBCTL Validate results*\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review in CBC Console>"
                		]
 	        ],
 
@@ -40,7 +40,7 @@ node {
                 "type": "section",
          	"text": [
                 	 "type": "mrkdwn",
-                     	 "text": "*${env.JOB_NAME}*"
+                     	 "text": "*${env.JOB_NAME}*\n\n ${CBCTL_RESULTS}"
 	               	]
         ]
     ]   
@@ -48,12 +48,14 @@ node {
         stage('Validate image') {
             try {
                 echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-                sh '/var/jenkins_home/app/cbctl image validate hello-world -o json >> ${REPO}_${IMAGE}_validate.json'
+                sh '/var/jenkins_home/app/cbctl image validate jbarosin/nodeapp -o json > ${REPO}_${IMAGE}_validate.json'
+		sh 'python /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json' 
                 slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"  
                 slackSend(channel: "#build-alerts", blocks: blocks)
             } 
             catch (err) { 
                 echo "Build failed. Review Cbctl scan results." 
+                slackSend(channel: "#build-alerts", blocks: blocks)
                 slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for {Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
             }
         }
