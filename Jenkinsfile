@@ -84,7 +84,7 @@ node {
                    slackSend(channel: "#build-alerts", blocks: blocks_fail)
                 }
                //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
-                   slackUploadFile filePath: "slack_block.txt", initial Comments: ""
+                   slackUploadFile filePath: "slack_block.txt", initialComment: ""
              }
         }
     }
