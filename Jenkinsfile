@@ -7,6 +7,18 @@ node {
         checkout scm
     }
 
+    stage('logstash-test') {
+        try {
+        // do something that fails
+            sh "exit 1"
+            currentBuild.result = 'SUCCESS'
+        } catch (Exception err) {
+        currentBuild.result = 'FAILURE'
+           }
+        echo "RESULT: ${currentBuild.result}"
+        logstashSend failBuild: true, maxLines: 10 
+    }    
+
     stage('Build image') {
         /* This builds the actual image */
 
@@ -22,7 +34,6 @@ node {
     }
     withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp"]){
         stage('Scan image') {
-            logstashSend 
             sh '/var/jenkins_home/app/run_cbctl.sh'
             sh '/var/jenkins_home/app/cbctl image scan ${REPO}/${IMAGE} -o json >> ${BUILD_NUMBER_SCAN_OUTFILE}'
             slackUploadFile filePath: "${BUILD_NUMBER_SCAN_OUTFILE}", initialComment: "Scan results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
