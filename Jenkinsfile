@@ -23,27 +23,29 @@ node {
     
     withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp"]){
         
-        blocks = [
-	[
-		"type": "section",
-		"text": [
-			"type": "mrkdwn",
-			"text": "*CBCTL Validate results*"
-		]
-	],
-    [
-		"type": "divider"
-	],
-	[
-		"type": "section",
-		"text": [
-			"type": "mrkdwn",
-			"text": "*No Violations!* :star:",
-                        "color": "#36a64f"
-		]
-	]
-] 
-    
+    blocks = [
+	        [
+        	 "type": "section",
+           	 "text": [
+                      	"type": "mrkdwn",
+                       	"text": "*CBCTL Validate results*"
+               		]
+	        ],
+
+    	[
+                "type": "divider"
+        ],
+
+        [
+                "type": "section",
+         	"text": [
+                	 "type": "mrkdwn",
+                     	 "text": "*${env.JOB_NAME}*",
+                         "color": "#36a64f"
+	               	]
+        ]
+    ]   
+ 
         stage('Validate image') {
             try {
                 echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
