@@ -40,8 +40,7 @@ node {
                 "type": "section",
          	"text": [
                 	 "type": "mrkdwn",
-                     	 "text": "*${env.JOB_NAME}*",
-                         "color": "#36a64f"
+                     	 "text": "*${env.JOB_NAME}*"
 	               	]
         ]
     ]   
