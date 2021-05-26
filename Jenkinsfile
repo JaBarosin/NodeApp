@@ -7,17 +7,17 @@ node {
         checkout scm
     }
 
-    stage('logstash-test') {
-        try {
+ //    stage('logstash-test') {
+   //     try {
         // do something that fails
-            sh "exit 1"
-            currentBuild.result = 'SUCCESS'
-        } catch (Exception err) {
-        currentBuild.result = 'FAILURE'
-           }
-        echo "RESULT: ${currentBuild.result}"
-        logstashSend failBuild: true, maxLines: 25 
-    }    
+     //       sh "exit 1"
+     //       currentBuild.result = 'SUCCESS'
+     //   } catch (Exception err) {
+     //   currentBuild.result = 'FAILURE'
+     //      }
+     //   echo "RESULT: ${currentBuild.result}"
+     //   logstashSend failBuild: true, maxLines: 25 
+ //   }    
 
     stage('Build image') {
         /* This builds the actual image */
