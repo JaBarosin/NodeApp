@@ -57,7 +57,7 @@ node {
                 echo "Build failed. Review Cbctl scan results." 
                 sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 
-            SLACK_CBCTL = sh (cat slack_block.txt)
+            SLACK_CBCTL = sh 'cat slack_block.txt'
             echo "Message to send in slack_block: ${SLACK_CBCTL}"
             blocks_fail = [
                     [
