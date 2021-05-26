@@ -57,7 +57,7 @@ node {
                 echo "Build failed. Review Cbctl scan results." 
                 sh 'python /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 
-                withEnv(["CBCTL_RESULTS_OUT=${sh(cat slack_block.txt){
+                withEnv(["CBCTL_RESULTS_OUT=${sh 'cat slack_block.txt'){
                     slackSend(channel: "#build-alerts", blocks: blocks)
                 }
               //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
