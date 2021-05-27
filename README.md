@@ -7,7 +7,8 @@ Jenkins-docker server configuration steps can be found here: https://github.com/
 Slack configuration steps: https://plugins.jenkins.io/slack/#bot-user-mode
 
 Here is a snipit of the stage that is used to run cbctl:
-    Note: cbctl_validate_helper.py can be found in the above jenkins repo inside the 'app' folder
+
+    - Note: cbctl_validate_helper.py can be found in the above jenkins repo inside the 'app' folder
 ```
     - stage('Validate image') {
             try {
