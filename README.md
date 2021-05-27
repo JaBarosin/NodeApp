@@ -26,3 +26,7 @@ Note: cbctl_validate_helper.py can be found in the above jenkins repo inside the
           }
 ```
 
+**Jenkins-docker Setup**
+
+If helpful, this is one vid i used to get my jenkins->github credentials set up: https://www.youtube.com/watch?v=mGXGIOpKAos
+
