@@ -99,12 +99,12 @@ node {
                 echo "Trying to Push Docker Build to DockerHub"
   }
 
-    stage('Deploy to Microk8s') {
-       echo "Deploying to microk8s on dev host" 
-       sh 'ssh -tt 192.168.6.44'
-       sh 'microk8s.kubectl apply -f /opt/k8s/NodeApp/deployment.yaml' 
-       sh 'exit'  
-  }
+//    stage('Deploy to Microk8s') {
+  //     echo "Deploying to microk8s on dev host" 
+  //     sh 'ssh -tt 192.168.6.44'
+  //     sh 'microk8s.kubectl apply -f /opt/k8s/NodeApp/deployment.yaml' 
+  //     sh 'exit'  
+ // }
 
 
 }
