@@ -101,7 +101,7 @@ node {
 
     stage('Deploy to Microk8s') {
        echo "Deploying to microk8s on dev host" 
-       sh './deploy-nodeapp.sh' 
+       sh 'ssh 192.168.6.44 "microk8s.kubectl apply -f /opt/jake-repos/node-docker/NodeApp/config/deployment.yaml"' 
     }
 
 
