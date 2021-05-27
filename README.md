@@ -1,10 +1,10 @@
 # NodeApp
 
-Demo repo which can be used to test the first few stages of a CI pipeline and include cbctl validate and scan results.
+This is a Demo repo which can be used to get started and test the first few stages of a CI pipeline and include cbctl validate + scan results.
 
-Jenkins-docker server configuration steps can be found here: https://github.com/JaBarosin/jenkins
+The Jenkins-docker server configuration steps can be found here: https://github.com/JaBarosin/jenkins
 
-Slack configuration steps: https://plugins.jenkins.io/slack/#bot-user-mode
+I used Slack for my first tests, but plugins to logstash, jira, or wherever you'd like to send a message to should be easy enough to add.  Here are the Slack configuration steps if interested: https://plugins.jenkins.io/slack/#bot-user-mode
 
 Here is a snipit of the stage that is used to run cbctl:
 
