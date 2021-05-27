@@ -48,14 +48,14 @@ node {
         stage('Validate image') {
             try {
                 echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-                sh '/var/jenkins_home/app/cbctl image validate hello-world -o json > ${REPO}_${IMAGE}_validate.json'
+                sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
 		sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"  
                 
                 slackSend(channel: "#build-alerts", blocks: blocks)
             } 
             catch (err) { 
-                echo "Build failed. Review Cbctl scan results." 
+                echo "Build detected cbctl violations. Review Cbctl scan results." 
                 sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 
             SLACK_CBCTL = sh 'cat slack_block.txt'
