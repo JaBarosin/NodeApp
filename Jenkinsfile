@@ -28,7 +28,7 @@ node {
         	 "type": "section",
            	 "text": [
                       	"type": "mrkdwn",
-                       	"text": "*CBCTL Validate results*\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review in CBC Console>"
+                       	"text": "*CBCTL Validate results* - No build violations\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
                		]
 	        ],
 
@@ -40,7 +40,7 @@ node {
                 "type": "section",
          	"text": [
                 	 "type": "mrkdwn",
-                     	 "text": "*${env.JOB_NAME}*\n\n ${CBCTL_RESULTS}"
+                     	 "text": "${env.JOB_NAME} - ${CBCTL_RESULTS}"
 	               	]
         ]
     ]   
@@ -50,7 +50,8 @@ node {
                 echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
                 sh '/var/jenkins_home/app/cbctl image validate hello-world -o json > ${REPO}_${IMAGE}_validate.json'
 		sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
-                slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"  
+                // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"  
+                
                 slackSend(channel: "#build-alerts", blocks: blocks)
             } 
             catch (err) { 
@@ -64,7 +65,7 @@ node {
                      "type": "section",
                      "text": [
                             "type": "mrkdwn",
-                            "text": "*CBCTL Validate results*\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review in CBC Console>"
+                            "text": "*CBCTL Validate results* - Build violations detected\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
                             ]
                     ],
 
