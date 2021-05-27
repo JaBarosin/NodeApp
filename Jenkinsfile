@@ -97,5 +97,12 @@ node {
             app.push("latest")
             } 
                 echo "Trying to Push Docker Build to DockerHub"
+  }
+
+    stage('Deploy to Microk8s') {
+       echo "Deploying to microk8s on dev host" 
+       sh './deploy-nodeapp.sh' 
     }
+
+
 }
