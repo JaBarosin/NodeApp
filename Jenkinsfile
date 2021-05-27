@@ -77,7 +77,7 @@ node {
                     "type": "section",
                     "text": [
                             "type": "mrkdwn",
-                            "text": "*${env.JOB_NAME}* -  ${SLACK_CBCTL}"
+                            "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
                         ]
                 ]
              ]
