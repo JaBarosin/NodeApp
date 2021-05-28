@@ -52,7 +52,7 @@ node {
 		sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
                 // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"  
                 
-                slackSend(channel: "#build-alerts", blocks: blocks)
+               // slackSend(channel: "#build-alerts", blocks: blocks)
             } 
             catch (err) { 
                 echo "Build detected cbctl violations. Review Cbctl scan results." 
@@ -82,10 +82,12 @@ node {
                 ]
              ]
 
-                   slackSend(channel: "#build-alerts", blocks: blocks_fail)
+               // slackSend(channel: "#build-alerts", blocks: blocks_fail)
                 
                //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
-                   slackUploadFile filePath: "slack_block.txt", initialComment: ""
+               //    slackUploadFile filePath: "slack_block.txt", initialComment: ""
+	      
+		    echo "results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
              }
         }
     }
