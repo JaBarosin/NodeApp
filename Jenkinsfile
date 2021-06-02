@@ -7,22 +7,47 @@ node {
         checkout scm
     }
 
+    /*
+       Build stage.  Build statically defined image name.
+    */
     stage('Build image') {
         /* This builds the actual image */
 
         app = docker.build("jbarosin/nodeapp")
     }
 
+    /*
+       Test stage.  Not much to see here...
+    */
+
     stage('Test image') {
-        
+
         app.inside {
             echo "Tests passed"
             echo "Current build lookin: ${currentBuild.currentResult}"
         }
     }
-    
+
+    /*
+        Push new build to docker hub
+    */
+
+    stage('Push image') {
+            /*
+    			You would need to first register with DockerHub before you can push images to your account
+    		*/
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+                app.push("latest")
+                }
+                    echo "Trying to Push Docker Build to DockerHub"
+      }
+
     withEnv(["BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json", "REPO=jbarosin", "IMAGE=nodeapp", "CBCTL_RESULTS=testing"]){
-        
+
+    /*
+        This builds the slack blocks for sending success/failed cbctl validate results.
+    */
+
     blocks = [
 	        [
         	 "type": "section",
@@ -43,21 +68,21 @@ node {
                      	 "text": "${env.JOB_NAME} - ${CBCTL_RESULTS}"
 	               	]
         ]
-    ]   
- 
+    ]
+
         stage('Validate image') {
             try {
-                echo "Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
+                echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
                 sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
-		sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
-                // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"  
-                
-               // slackSend(channel: "#build-alerts", blocks: blocks)
-            } 
-            catch (err) { 
-                echo "Build detected cbctl violations. Review Cbctl scan results." 
-                sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt' 
-                
+		            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
+
+                // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+                // slackSend(channel: "#build-alerts", blocks: blocks)
+            }
+            catch (err) {
+                echo "Build detected cbctl violations. Review Cbctl scan results."
+                sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
+
             SLACK_CBCTL = sh 'cat slack_block.txt'
             echo "Message to send in slack_block: ${SLACK_CBCTL}"
             blocks_fail = [
@@ -83,31 +108,24 @@ node {
              ]
 
                // slackSend(channel: "#build-alerts", blocks: blocks_fail)
-                
-               //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}" 
+
+               //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
                //    slackUploadFile filePath: "slack_block.txt", initialComment: ""
-	      
+
 		    echo "results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
              }
         }
     }
 
-//    stage('Push image') {
-        /* 
-			You would need to first register with DockerHub before you can push images to your account
-		*/
-  //      docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-  //          app.push("latest")
-  //          } 
-  //              echo "Trying to Push Docker Build to DockerHub"
-//  }
+/* testing remote deployment to microk8s
 
-//    stage('Deploy to Microk8s') {
-  //     echo "Deploying to microk8s on dev host" 
-  //     sh 'ssh -tt 192.168.6.44'
-  //     sh 'microk8s.kubectl apply -f /opt/k8s/NodeApp/deployment.yaml' 
-  //     sh 'exit'  
- // }
+    stage('Deploy to Microk8s') {
+       echo "Deploying to microk8s on dev host"
+       sh 'ssh -tt 192.168.6.44'
+       sh 'microk8s.kubectl apply -f /opt/k8s/NodeApp/deployment.yaml'
+       sh 'exit'
+  }
 
+*/
 
 }
