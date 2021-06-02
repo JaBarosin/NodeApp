@@ -72,6 +72,10 @@ node {
 
     /*
         Validate new build with cbctl. Outfiles written include the image_name_validate.json and the slack_block.txt
+        Try to validate and send confirmation of no violations.
+
+        Catch cbctl error and send offending rules to slack_block.txt. File is uploaded currently but ideally i want to show the
+        rules in the slack message.
     */
 
         stage('Validate image') {
@@ -80,42 +84,41 @@ node {
                 sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
 		            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
 
-                // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+                slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
                 // slackSend(channel: "#build-alerts", blocks: blocks)
             }
             catch (err) {
                 echo "Build detected cbctl violations. Review Cbctl scan results."
                 sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
 
-            SLACK_CBCTL = sh 'cat slack_block.txt'
-            echo "Message to send in slack_block: ${SLACK_CBCTL}"
-            blocks_fail = [
+                SLACK_CBCTL = sh 'cat slack_block.txt'
+                echo "Message to send in slack_block: ${SLACK_CBCTL}"
+                blocks_fail = [
+                        [
+                         "type": "section",
+                         "text": [
+                                "type": "mrkdwn",
+                                "text": "*CBCTL Validate results* - Build violations detected\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
+                                ]
+                        ],
+
                     [
-                     "type": "section",
-                     "text": [
-                            "type": "mrkdwn",
-                            "text": "*CBCTL Validate results* - Build violations detected\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
-                            ]
+                        "type": "divider"
                     ],
 
-                [
-                    "type": "divider"
-                ],
-
-                [
-                    "type": "section",
-                    "text": [
-                            "type": "mrkdwn",
-                            "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
-                        ]
-                ]
-             ]
-
-               // slackSend(channel: "#build-alerts", blocks: blocks_fail)
+                    [
+                        "type": "section",
+                        "text": [
+                                "type": "mrkdwn",
+                                "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
+                            ]
+                    ]
+                 ]
 
                //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
 
-               // slackUploadFile filePath: "slack_block.txt", initialComment: ""
+               slackSend(channel: "#build-alerts", blocks: blocks_fail)
+               slackUploadFile filePath: "slack_block.txt", initialComment: ""
 		           echo "results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
              }
         }
