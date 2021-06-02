@@ -70,6 +70,10 @@ node {
         ]
     ]
 
+    /*
+        Validate new build with cbctl. Outfiles written include the image_name_validate.json and the slack_block.txt
+    */
+
         stage('Validate image') {
             try {
                 echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
