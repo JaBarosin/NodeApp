@@ -105,7 +105,7 @@ node {
           }
           catch (err) {
               echo "Build detected cbctl violations. Review Cbctl scan results."
-              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations${env.JOB_NUMBER}.txt'
+              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations_${env.JOB_NUMBER}.txt'
 
               // SLACK_CBCTL = sh 'cat slack_block.txt'
               // echo "Message to send in slack_block: ${SLACK_CBCTL}"
