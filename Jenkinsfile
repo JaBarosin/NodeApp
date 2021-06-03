@@ -102,14 +102,7 @@ node {
                           ]
                   ]
 
-              //
-              //     [
-              //     "type": "section",
-              //     "text": [
-              //             "type": "mrkdwn",
-              //             "text": "View ${env.JOB_NAME} Build no. ${env.BUILD_NUMBER} - <${env.BUILD_URL}| here >"
-              //         ]
-              // ]
+
            ]
 
           if(violations == false) {
