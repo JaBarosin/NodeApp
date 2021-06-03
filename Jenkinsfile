@@ -93,7 +93,7 @@ node {
       stage('Validate image') {
           try {
               echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-              sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
+              sh '/var/jenkins_home/app/cbctl image validate hello-world -o json > ${REPO}_${IMAGE}_validate.json'
 	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
 
               slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
