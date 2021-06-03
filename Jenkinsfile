@@ -85,6 +85,8 @@ node {
 
         /*
           Creates slack block messages and uploads violation summary to channel.
+
+          Comment out this stage if you dont want to send to Slack :(
         */
 
         stage('Send Validate Results') {
