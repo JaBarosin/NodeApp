@@ -73,8 +73,7 @@ node {
               sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
 	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations.txt'
 
-              // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
-              // slackSend(channel: "#build-alerts", blocks: blocks)
+
           }
           catch (err) {
               violations = true
@@ -90,8 +89,8 @@ node {
 
         stage('Send Validate Results') {
 
-          SLACK_CBCTL = sh 'cat slack_block.txt'
-          echo "Message to send in slack_block: ${SLACK_CBCTL}"
+          //SLACK_CBCTL = sh 'cat slack_block.txt'
+          //echo "Message to send in slack_block: ${SLACK_CBCTL}"
           blocks_fail = [
                   [
                    "type": "section",
@@ -109,7 +108,7 @@ node {
                   "type": "section",
                   "text": [
                           "type": "mrkdwn",
-                          "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
+                          "text": "${env.JOB_NAME} -  ${env.BUILD_URL}"
                       ]
               ]
            ]
