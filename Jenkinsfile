@@ -169,12 +169,12 @@ node {
               ]
            ]
 
-          if(violations = false) {
+          if(violations == false) {
             slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
 
           }
 
-          if(violations = true) {
+          if(violations == true) {
             slackSend(channel: "#build-alerts", blocks: blocks_fail)
             slackUploadFile filePath: "cbctl_policy_violations_${env.JOB_NUMBER}.txt", initialComment: ""
             echo "Violations occured. results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
