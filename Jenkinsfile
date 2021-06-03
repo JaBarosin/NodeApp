@@ -99,20 +99,18 @@ node {
                    "text": [
                           "type": "mrkdwn",
                           "text": "View container details in CBC Console - <https://defense-prod05.conferdeploy.net/kubernetes/repos| here >"
+                          "\n View ${env.JOB_NAME} Build no. ${env.BUILD_NUMBER} - <${env.BUILD_URL}| here > "
                           ]
-                  ],
+                  ]
 
-              [
-                  "type": "divider"
-              ],
-
-              [
-                  "type": "section",
-                  "text": [
-                          "type": "mrkdwn",
-                          "text": "View ${env.JOB_NAME} Build no. ${env.BUILD_NUMBER} - <${env.BUILD_URL}| here >"
-                      ]
-              ]
+              //
+              //     [
+              //     "type": "section",
+              //     "text": [
+              //             "type": "mrkdwn",
+              //             "text": "View ${env.JOB_NAME} Build no. ${env.BUILD_NUMBER} - <${env.BUILD_URL}| here >"
+              //         ]
+              // ]
            ]
 
           if(violations == false) {
