@@ -2,7 +2,7 @@
 
 Hey y'all! This is a Demo repo which can be used to get started and test the first few stages of a CI pipeline and include cbctl validate + scan results.
 
-The Jenkins-docker server configuration steps can be found here: https://github.com/JaBarosin/jenkins
+The **Jenkins-docker** server configuration steps can be found here: https://github.com/JaBarosin/jenkins
 
 I used Slack for my first tests, but plugins to logstash, jira, or wherever you'd like to send a message to should be easy enough to add.  Here are the Slack configuration steps if interested: https://plugins.jenkins.io/slack/#bot-user-mode
 
@@ -27,7 +27,3 @@ stage('Validate image') {
      }
   }
 ```
-
-**Jenkins-docker Setup**
-
-If helpful, this is one vid i used to get my jenkins->github credentials set up: https://www.youtube.com/watch?v=mGXGIOpKAos
