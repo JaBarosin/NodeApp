@@ -71,7 +71,7 @@ node {
           try {
               echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
               sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
-	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations_${env.BUILD_NUMBER}.txt'
+	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations.txt'
 
               // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
               // slackSend(channel: "#build-alerts", blocks: blocks)
@@ -79,7 +79,7 @@ node {
           catch (err) {
               violations = true
               echo "Build detected cbctl violations. Review Cbctl scan results."
-              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations_${env.BUILD_NUMBER}.txt'
+              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations.txt'
 
            }
         }
@@ -121,8 +121,8 @@ node {
 
           if(violations == true) {
             slackSend(channel: "#build-alerts", blocks: blocks_fail)
-            slackUploadFile filePath: "cbctl_policy_violations_${env.BUILD_NUMBER}.txt", initialComment: ""
-            echo "Violations occured. results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
+            slackUploadFile filePath: "cbctl_policy_violations.txt", initialComment: ""
+            echo "Violations occured. results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'cbctl_policy_violations.txt'"
 
 
           }
