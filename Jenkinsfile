@@ -65,27 +65,27 @@ node {
         This builds the slack blocks for sending success/failed cbctl validate results.
     */
 
-    blocks = [
-	        [
-        	 "type": "section",
-           "text": [
-                      	"type": "mrkdwn",
-                       	"text": "*CBCTL Validate results* - No build violations\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
-               		 ]
-	        ],
-
-    	    [
-                "type": "divider"
-          ],
-
-         [
-          "type": "section",
-   	      "text": [
-                	 "type": "mrkdwn",
-                   "text": "${env.JOB_NAME} - ${CBCTL_RESULTS}"
-	               	]
-         ]
-    ]
+    // blocks = [
+	  //       [
+    //     	 "type": "section",
+    //        "text": [
+    //                   	"type": "mrkdwn",
+    //                    	"text": "*CBCTL Validate results* - No build violations\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
+    //            		 ]
+	  //       ],
+    //
+    // 	    [
+    //             "type": "divider"
+    //       ],
+    //
+    //      [
+    //       "type": "section",
+   	//       "text": [
+    //             	 "type": "mrkdwn",
+    //                "text": "${env.JOB_NAME} - ${CBCTL_RESULTS}"
+	  //              	]
+    //      ]
+    // ]
 
     /*
         Validate new build with cbctl. Outfiles written include the ${IMAGE}_${NAME}_validate.json and the cbctl_policy_violations.txt
