@@ -1,6 +1,10 @@
 node {
     def app
 
+    /* Default to no violations. Used to specify whether no violations vs. violations
+    message is sent. */
+    violations = false
+
     stage('Clone repository') {
         /* Cloning the Repository to jenkins-docker Workspace */
 
@@ -84,9 +88,9 @@ node {
     ]
 
     /*
-        Validate new build with cbctl. Outfiles written include the ${IMAGE}_${NAME}_validate.json and the slack_block.txt
+        Validate new build with cbctl. Outfiles written include the ${IMAGE}_${NAME}_validate.json and the cbctl_policy_violations.txt
         Tries to validate and send confirmation of no violations.
-        Catch cbctl error when violations occur and send offending rules to slack_block.txt for upload. File is uploaded currently but ideally i want to show the
+        Catch cbctl error when violations occur and send offending rules to cbctl_policy_violations.txt for upload. File is uploaded currently but ideally i want to show the
         rules in the slack message.
     */
 
@@ -94,46 +98,94 @@ node {
           try {
               echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
               sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
-	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
+	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations_${env.JOB_NUMBER}.txt'
 
-              slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+              // slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
               // slackSend(channel: "#build-alerts", blocks: blocks)
           }
           catch (err) {
               echo "Build detected cbctl violations. Review Cbctl scan results."
-              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > slack_block.txt'
+              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations${env.JOB_NUMBER}.txt'
 
-              SLACK_CBCTL = sh 'cat slack_block.txt'
-              echo "Message to send in slack_block: ${SLACK_CBCTL}"
-              blocks_fail = [
-                      [
-                       "type": "section",
-                       "text": [
-                              "type": "mrkdwn",
-                              "text": "*CBCTL Validate results* - Build violations detected\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
-                              ]
-                      ],
-
-                  [
-                      "type": "divider"
-                  ],
-
-                  [
-                      "type": "section",
-                      "text": [
-                              "type": "mrkdwn",
-                              "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
-                          ]
-                  ]
-               ]
+              // SLACK_CBCTL = sh 'cat slack_block.txt'
+              // echo "Message to send in slack_block: ${SLACK_CBCTL}"
+              // blocks_fail = [
+              //         [
+              //          "type": "section",
+              //          "text": [
+              //                 "type": "mrkdwn",
+              //                 "text": "*CBCTL Validate results* - Build violations detected\n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
+              //                 ]
+              //         ],
+              //
+              //     [
+              //         "type": "divider"
+              //     ],
+              //
+              //     [
+              //         "type": "section",
+              //         "text": [
+              //                 "type": "mrkdwn",
+              //                 "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
+              //             ]
+              //     ]
+              //  ]
 
              //  slackUploadFile filePath: "${REPO}_${IMAGE}_validate.json", initialComment: "Validate results for [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
 
-             slackSend(channel: "#build-alerts", blocks: blocks_fail)
-             slackUploadFile filePath: "slack_block.txt", initialComment: ""
-	           echo "results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
+             // slackSend(channel: "#build-alerts", blocks: blocks_fail)
+             // slackUploadFile filePath: "slack_block.txt", initialComment: ""
+	           // echo "results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
            }
         }
+
+        /*
+          Creates slack block messages and uploads violation summary to channel.
+        */
+
+        stage('Send Validate Results') {
+
+          SLACK_CBCTL = sh 'cat slack_block.txt'
+          echo "Message to send in slack_block: ${SLACK_CBCTL}"
+          blocks_fail = [
+                  [
+                   "type": "section",
+                   "text": [
+                          "type": "mrkdwn",
+                          "text": "*CBCTL Validate results* - \n<https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
+                          ]
+                  ],
+
+              [
+                  "type": "divider"
+              ],
+
+              [
+                  "type": "section",
+                  "text": [
+                          "type": "mrkdwn",
+                          "text": "${env.JOB_NAME} -  ${SLACK_CBCTL}"
+                      ]
+              ]
+           ]
+
+          if(violations = false) {
+            slackSend color: "good", message: "No violations! Woohoo! [Jenkins] '${env.JOB_NAME}' ${env.BUILD_URL}"
+
+          }
+
+          if(violations = true) {
+            slackSend(channel: "#build-alerts", blocks: blocks_fail)
+            slackUploadFile filePath: "cbctl_policy_violations_${env.JOB_NUMBER}.txt", initialComment: ""
+            echo "Violations occured. results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'slack_block.txt'"
+
+
+          }
+
+
+        }
+
+
     }
 
 /* testing remote deployment to microk8s
