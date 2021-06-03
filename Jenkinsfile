@@ -27,7 +27,7 @@ node {
       /*
          Build stage.  Build statically defined image name.
       */
-        app = docker.build("${REPO}/{IMAGE}")
+        app = docker.build("${REPO}/${IMAGE}")
     }
 
 
