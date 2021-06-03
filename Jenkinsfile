@@ -98,7 +98,7 @@ node {
                    "type": "section",
                    "text": [
                           "type": "mrkdwn",
-                          "text": "*CBCTL Validate results* - <https://defense-prod05.conferdeploy.net/kubernetes/repos|Review related image in CBC Console>"
+                          "text": "View container details in CBC Console - <https://defense-prod05.conferdeploy.net/kubernetes/repos| here >"
                           ]
                   ],
 
@@ -110,7 +110,7 @@ node {
                   "type": "section",
                   "text": [
                           "type": "mrkdwn",
-                          "text": "<${env.BUILD_URL}|${env.JOB_NAME} ${env.BUILD_NUMBER}>"
+                          "text": "View ${env.JOB_NAME} Build no. ${env.BUILD_NUMBER} - <${env.BUILD_URL}| here >"
                       ]
               ]
            ]
