@@ -15,6 +15,7 @@ node {
         "BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json",
         "REPO=jbarosin",
         "IMAGE=nodeapp",
+        "TAG=dev",
         "CBCTL_RESULTS=testing"]){
 
       /*
@@ -31,7 +32,7 @@ node {
       /*
          Build stage.  Build statically defined image name.
       */
-        app = docker.build("${REPO}/${IMAGE}")
+        app = docker.build("${REPO}/${IMAGE}:${TAG}")
     }
 
 
@@ -54,7 +55,7 @@ node {
           docker account in Jenkins, or modify it accordingly.
     		*/
             docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-                app.push("latest")
+                app.push("${TAG}")
                 }
                     echo "Trying to Push Docker Build to DockerHub"
       }
@@ -69,8 +70,8 @@ node {
 
       stage('Validate image') {
           try {
-              echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-              sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE} -o json > ${REPO}_${IMAGE}_validate.json'
+              echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}:${TAG}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
+              sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE}:${TAG} -o json > ${REPO}_${IMAGE}_validate.json'
 	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations.txt'
 
 
