@@ -123,6 +123,27 @@ node {
         }
 
 
+        stage('Deploy to dev cluster') {
+          /*
+             Using deployment manifest in NodeApp repo, deploy pods and service
+             for NodeApp
+          */
+
+            app.inside {
+                echo "Deploying to K8s passed"
+                echo "Current build lookin: ${currentBuild.currentResult}"
+            }
+
+
+            kubernetesDeploy(kubeconfigId: 'dev',
+              dockerCredentials: [
+                [credentialsId: 'docker-hub']
+              ]
+            )
+
+        }
+
+
     }
 
 /* testing remote deployment to microk8s
