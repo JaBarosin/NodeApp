@@ -43,9 +43,11 @@ node {
 
         app.inside {
             echo "Tests passed"
-            sh 'curl 0.0.0.0:30333'
             echo "Current build lookin: ${currentBuild.currentResult}"
         }
+
+        sh 'curl 0.0.0.0:30333'
+
     }
 
 
