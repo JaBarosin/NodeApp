@@ -43,6 +43,7 @@ node {
 
         app.inside {
             echo "Tests passed"
+            sh 'curl 0.0.0.0:30333'
             echo "Current build lookin: ${currentBuild.currentResult}"
         }
     }
@@ -122,41 +123,41 @@ node {
 
         }
 
-        stage('Deploy to docker') {
-          /*
-             Using deployment manifest in NodeApp repo, deploy pods and service
-             for NodeApp
-          */
+        // stage('Deploy to docker') {
+        //   /*
+        //      Using deployment manifest in NodeApp repo, deploy pods and service
+        //      for NodeApp
+        //   */
+        //   app.inside {
+        //     stage('Test') {
+        //         sh 'curl 0.0.0.0:30333'
+        //     }
+        //   }
+        //
+        // }
 
-            withDockerContainer(args: 'curl 0.0.0.0:30333', image: 'jbarosin/nodeapp:dev') {
-            }
-
-            echo "Tested 'withDockerContainer'. "
-
-        }
-
-        stage('Deploy to dev cluster') {
-          /*
-             Using deployment manifest in NodeApp repo, deploy pods and service
-             for NodeApp
-          */
-
-            withDockerContainer(args: 'curl 0.0.0.0:30333', image: 'jbarosin/nodeapp:dev') {
-            }
-
-            app.inside {
-                echo "Deploying to K8s passed"
-                echo "Current build lookin: ${currentBuild.currentResult}"
-            }
-
-
-            kubernetesDeploy(kubeconfigId: 'dev',
-              dockerCredentials: [
-                [credentialsId: 'docker-hub']
-              ]
-            )
-
-        }
+        // stage('Deploy to dev cluster') {
+        //   /*
+        //      Using deployment manifest in NodeApp repo, deploy pods and service
+        //      for NodeApp
+        //   */
+        //
+        //     withDockerContainer(args: 'curl 0.0.0.0:30333', image: 'jbarosin/nodeapp:dev') {
+        //     }
+        //
+        //     app.inside {
+        //         echo "Deploying to K8s"
+        //         echo "Current build lookin: ${currentBuild.currentResult}"
+        //     }
+        //
+        //
+        //     // kubernetesDeploy(kubeconfigId: 'dev',
+        //     //   dockerCredentials: [
+        //     //     [credentialsId: 'docker-hub']
+        //     //   ]
+        //     // )
+        //
+        // }
 
 
     }
