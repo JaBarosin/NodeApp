@@ -122,12 +122,27 @@ node {
 
         }
 
+        stage('Deploy to docker') {
+          /*
+             Using deployment manifest in NodeApp repo, deploy pods and service
+             for NodeApp
+          */
+
+            withDockerContainer(args: 'curl 0.0.0.0:30333', image: 'jbarosin/nodeapp:dev') {
+            }
+
+            echo "Tested 'withDockerContainer'. "
+
+        }
 
         stage('Deploy to dev cluster') {
           /*
              Using deployment manifest in NodeApp repo, deploy pods and service
              for NodeApp
           */
+
+            withDockerContainer(args: 'curl 0.0.0.0:30333', image: 'jbarosin/nodeapp:dev') {
+            }
 
             app.inside {
                 echo "Deploying to K8s passed"
