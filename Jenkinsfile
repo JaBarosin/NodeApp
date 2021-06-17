@@ -44,7 +44,7 @@ node {
           /* Requires the Docker Pipeline plugin to be installed */
           docker.image('${REPO}/${IMAGE}:${TAG}').inside {
                   sh 'node --version'
-                  sh 'curl 0.0.0.0:8000'
+                  sh 'curl 0.0.0.0:8000 > nodeapp-testcurl.txt'
           }
 
             echo "Current build lookin: ${currentBuild.currentResult}"
