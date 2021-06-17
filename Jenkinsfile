@@ -41,12 +41,15 @@ node {
          Test stage.  Not much to see here...
       */
 
-        app.inside {
-            echo "Tests passed"
+          /* Requires the Docker Pipeline plugin to be installed */
+          docker.image('${REPO}/${IMAGE}:${TAG}').inside {
+                  sh 'node --version'
+                  sh 'curl 0.0.0.0:8000'
+          }
+
             echo "Current build lookin: ${currentBuild.currentResult}"
         }
 
-        sh 'curl 0.0.0.0:30333'
 
     }
 
@@ -125,18 +128,16 @@ node {
 
         }
 
-        // stage('Deploy to docker') {
-        //   /*
-        //      Using deployment manifest in NodeApp repo, deploy pods and service
-        //      for NodeApp
-        //   */
-        //   app.inside {
-        //     stage('Test') {
-        //         sh 'curl 0.0.0.0:30333'
-        //     }
-        //   }
-        //
-        // }
+        stage('Deploy to docker') {
+          /*
+             Using deployment manifest in NodeApp repo, deploy pods and service
+             for NodeApp
+          */
+        //  sh 'docker run --publish 8000:8000 jbarosin/nodeapp:dev'
+
+          }
+
+        }
 
         // stage('Deploy to dev cluster') {
         //   /*
