@@ -1,0 +1,33 @@
+def dock = "jenkins-docker-${UUID.randomUUID().toString()}"
+
+{
+   node(dock) {
+       stage('Cbctl Image Validate') {
+       sh '/var/jenkins_home/app/cbctl image validate jbarosin/nodeapp:dev'
+       }
+   }
+}
+
+def mk8s = "jenkins-mk8s-${UUID.randomUUID().toString()}"
+
+podTemplate(label: mk8s, containers: [
+  containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'get all', ttyEnabled: true)
+])
+
+podTemplate(label: mk8s, yaml: readTrusted('dep.yaml'), command: 'cat', ttyEnabled: true)
+
+{
+  node (mk8s) {
+
+    stage ('Test nodeapp mk8s') {
+        container('nodeapp-test') {
+          sh "echo hello from $POD_CONTAINER"
+        }
+      }
+    // stage ('deploy yaml') {
+    //     container('kubectl') {
+    //             sh "kubectl apply -f nick.yaml -n feline --validate=false"
+    //             sh "kubectl get all -n feline"
+    //     }
+  }
+}
