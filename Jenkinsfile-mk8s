@@ -1,11 +1,9 @@
 def dock = "jenkins-docker-${UUID.randomUUID().toString()}"
 
-{
-   node(dock) {
-       stage('Cbctl Image Validate') {
-       sh '/var/jenkins_home/app/cbctl image validate jbarosin/nodeapp:dev'
-       }
-   }
+node(dock) {
+     stage('Cbctl Image Validate') {
+     sh '/var/jenkins_home/app/cbctl image validate jbarosin/nodeapp:dev'
+     }
 }
 
 def mk8s = "jenkins-mk8s-${UUID.randomUUID().toString()}"
@@ -16,13 +14,11 @@ podTemplate(label: mk8s, containers: [
 
 podTemplate(label: mk8s, yaml: readTrusted('dep.yaml'), command: 'cat', ttyEnabled: true)
 
-{
-  node (mk8s) {
-
-    stage ('Test nodeapp mk8s') {
-        container('nodeapp-test') {
-          sh "echo hello from $POD_CONTAINER"
-        }
+node(mk8s) {
+  stage ('Test nodeapp mk8s') {
+      container('nodeapp-test') {
+        sh "echo hello from $POD_CONTAINER"
       }
+    }
   }
 }
