@@ -24,10 +24,5 @@ podTemplate(label: mk8s, yaml: readTrusted('dep.yaml'), command: 'cat', ttyEnabl
           sh "echo hello from $POD_CONTAINER"
         }
       }
-    // stage ('deploy yaml') {
-    //     container('kubectl') {
-    //             sh "kubectl apply -f nick.yaml -n feline --validate=false"
-    //             sh "kubectl get all -n feline"
-    //     }
   }
 }
