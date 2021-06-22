@@ -1,6 +1,6 @@
 def nodeapp = "jenkins-mk8s-${UUID.randomUUID().toString()}"
 
-podTemplate(label: nodeapp, yaml: readTrusted('dep.yaml'), containers: [
+podTemplate(label: nodeapp, yaml: readTrusted('pod.yaml'), containers: [
   containerTemplate(name: 'nodeapp-test', image: 'jbarosin/nodeapp:dev', command: 'cat', ttyEnabled: true)
 ]){
   node(nodeapp) {
