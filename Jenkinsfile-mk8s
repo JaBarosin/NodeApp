@@ -1,11 +1,13 @@
 def mk8s = "jenkins-mk8s-${UUID.randomUUID().toString()}"
 
-podTemplate(label: mk8s, yaml: readTrusted('dep.yaml'), command: 'cat', ttyEnabled: true)
-
-node(mk8s) {
-  stage ('Test nodeapp mk8s') {
-      container('nodeapp-test') {
-        sh "echo hello from $POD_CONTAINER"
+podTemplate(label: mk8s, yaml: readTrusted('dep.yaml'), containers: [
+  containerTemplate(name: 'nodeapp-test', image: 'jbarosin/nodeapp:dev', command: 'cat', ttyEnabled: true)
+]){
+  node(mk8s) {
+    stage ('Test nodeapp mk8s') {
+        container('nodeapp-test') {
+          sh "echo hello from $POD_CONTAINER"
+        }
       }
-    }
+  }
 }
