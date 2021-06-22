@@ -20,5 +20,4 @@ node(mk8s) {
         sh "echo hello from $POD_CONTAINER"
       }
     }
-  }
 }
