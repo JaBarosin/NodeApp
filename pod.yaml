@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: nodeapp
+  labels:
+    app: nodeapp
+spec:
+  containers:
+  - name: nodeapp-test
+    image: jbarosin/nodeapp:dev
+    ports:
+    - containerPort: 8000
