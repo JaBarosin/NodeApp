@@ -1,7 +1,7 @@
 node {
     def app
 
-    /* Default to no violations. Used to specify whether no violations vs. violations
+    /* Default is no violations. Used to specify whether no violations vs. violations
     message is sent. */
     violations = false
 
