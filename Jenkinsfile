@@ -36,7 +36,7 @@ node {
     }
 
 
-    stage('Test image') {
+    stage('Test image v1') {
       /*
          Test stage.  Not much to see here...
       */
