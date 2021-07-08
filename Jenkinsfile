@@ -36,7 +36,7 @@ node {
     }
 
 
-    stage('Test image v1') {
+    stage('Test image v.1') {
       /*
          Test stage.  Not much to see here...
       */
@@ -124,41 +124,6 @@ node {
 
         }
 
-        // stage('Deploy to dev cluster') {
-        //   /*
-        //      Using deployment manifest in NodeApp repo, deploy pods and service
-        //      for NodeApp
-        //   */
-        //
-        //     withDockerContainer(args: 'curl 0.0.0.0:30333', image: 'jbarosin/nodeapp:dev') {
-        //     }
-        //
-        //     app.inside {
-        //         echo "Deploying to K8s"
-        //         echo "Current build lookin: ${currentBuild.currentResult}"
-        //     }
-        //
-        //
-        //     // kubernetesDeploy(kubeconfigId: 'dev',
-        //     //   dockerCredentials: [
-        //     //     [credentialsId: 'docker-hub']
-        //     //   ]
-        //     // )
-        //
-        // }
-
-
-    }
-
-/* testing remote deployment to microk8s
-
-    stage('Deploy to Microk8s') {
-       echo "Deploying to microk8s on dev host"
-       sh 'ssh -tt 192.168.6.44'
-       sh 'microk8s.kubectl apply -f /opt/k8s/NodeApp/deployment.yaml'
-       sh 'exit'
-  }
-
-*/
+      }
 
 }
