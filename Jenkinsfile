@@ -45,12 +45,9 @@ node {
           docker.image('${REPO}/${IMAGE}:${TAG}').inside {
                   sh 'node --version'
                   sh 'curl 0.0.0.0:8000 > nodeapp-testcurl.txt'
-          }
+                }
 
             echo "Current build lookin: ${currentBuild.currentResult}"
-        }
-
-
     }
 
 
@@ -64,9 +61,7 @@ node {
                 app.push("${TAG}")
                 }
                     echo "Trying to Push Docker Build to DockerHub"
-      }
-
-
+    }
       /*
           Validate new build with cbctl. Outfiles written include the ${IMAGE}_${NAME}_validate.json and the cbctl_policy_violations.txt
           Tries to validate and send confirmation of no violations.
@@ -74,21 +69,21 @@ node {
           rules in the slack message.
       */
 
-      stage('Validate image') {
-          try {
-              echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}:${TAG}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-              sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE}:${TAG} -o json > ${REPO}_${IMAGE}_validate.json'
-	            sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations.txt'
+    stage('Validate image') {
+      try {
+        echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}:${TAG}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
+        sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE}:${TAG} -o json > ${REPO}_${IMAGE}_validate.json'
+	      sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations.txt'
 
+      }
 
-          }
-          catch (err) {
-              violations = true
-              echo "Build detected cbctl violations. Review Cbctl scan results."
-              sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations.txt'
+      catch (err) {
+        violations = true
+        echo "Build detected cbctl violations. Review Cbctl scan results."
+        sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations.txt'
 
-           }
-        }
+      }
+    }
 
         /*
           Creates slack block messages and uploads violation summary to channel.
@@ -120,7 +115,7 @@ node {
           if(violations == true) {
             slackSend(channel: "#build-alerts", blocks: blocks_fail)
             slackUploadFile filePath: "cbctl_policy_violations.txt", initialComment: ""
-            echo "Violations occured. results of cbctl validate can be found in ${REPO}/${IMAGE}_validate.json and a summary in 'cbctl_policy_violations.txt'"
+            echo "Violations occured. results of cbctl validate can be found in ${REPO}_${IMAGE}_validate.json and a summary in 'cbctl_policy_violations.txt'"
 
 
           }
@@ -128,14 +123,14 @@ node {
 
         }
 
-        stage('Deploy to docker') {
-          /*
-             Using deployment manifest in NodeApp repo, deploy pods and service
-             for NodeApp
-          */
-        //  sh 'docker run --publish 8000:8000 jbarosin/nodeapp:dev'
-
-          }
+        // stage('Deploy to docker') {
+        //   /*
+        //      Using deployment manifest in NodeApp repo, deploy pods and service
+        //      for NodeApp
+        //   */
+        // //  sh 'docker run --publish 8000:8000 jbarosin/nodeapp:dev'
+        //
+        //   }
 
         }
 
