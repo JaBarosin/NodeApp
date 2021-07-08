@@ -8,5 +8,8 @@ spec:
   containers:
   - name: nodeapp-test
     image: jbarosin/nodeapp:dev
+    command: ['sh', '-c', 'echo "Hello, NodeApp from Kubernetes!" && sleep 3600']
     ports:
-    - containerPort: 8000
+      - name: nodeapp-test
+        containerPort: 8000
+        protocol: TCP
