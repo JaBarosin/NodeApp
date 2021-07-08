@@ -59,8 +59,10 @@ node {
     		*/
             docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
                 app.push("${TAG}")
-                }
+            }
+
                     echo "Trying to Push Docker Build to DockerHub"
+
     }
       /*
           Validate new build with cbctl. Outfiles written include the ${IMAGE}_${NAME}_validate.json and the cbctl_policy_violations.txt
@@ -82,8 +84,8 @@ node {
         echo "Build detected cbctl violations. Review Cbctl scan results."
         sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_violations.txt'
 
+        }
       }
-    }
 
         /*
           Creates slack block messages and uploads violation summary to channel.
@@ -120,17 +122,6 @@ node {
 
           }
 
-
-        }
-
-        // stage('Deploy to docker') {
-        //   /*
-        //      Using deployment manifest in NodeApp repo, deploy pods and service
-        //      for NodeApp
-        //   */
-        // //  sh 'docker run --publish 8000:8000 jbarosin/nodeapp:dev'
-        //
-        //   }
 
         }
 
