@@ -13,9 +13,12 @@ node {
 
     withEnv([
         "BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json",
-        "REPO=jbarosin",
-        "IMAGE=nodeapp",
-        "TAG=dev",
+        "REPO=''",
+        "IMAGE=hello-world",
+        "TAG=latest",
+        // "REPO='jbarosin'",
+        // "IMAGE=nodeapp",
+        // "TAG=dev",
         "CBCTL_RESULTS=testing"]){
 
       /*
