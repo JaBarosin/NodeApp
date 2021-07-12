@@ -74,7 +74,7 @@ node {
     stage('Validate image') {
       try {
         echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}:${TAG}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
-        sh '/var/jenkins_home/app/cbctl image validate hello-world -o json > ${REPO}_${IMAGE}_validate.json'
+        sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE}:${TAG} -o json > ${REPO}_${IMAGE}_validate.json'
 	      sh 'python3 /var/jenkins_home/app/cbctl_validate_helper.py ${REPO}_${IMAGE}_validate.json > cbctl_policy_no_violations.txt'
 
       }
