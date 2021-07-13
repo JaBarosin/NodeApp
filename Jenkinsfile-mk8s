@@ -1,13 +1,18 @@
-def nodeapp = "jenkins-mk8s-${UUID.randomUUID().toString()}"
+node {
 
-podTemplate(label: nodeapp, yaml: readTrusted('pod.yaml'), containers: [
-  containerTemplate(name: 'nodeapp-test', image: 'jbarosin/nodeapp:dev', command: 'cat', ttyEnabled: true)
-]){
-  node(nodeapp) {
-    stage ('Test nodeapp mk8s') {
-        container('nodeapp-test') {
-          sh "echo hello from $POD_CONTAINER"
-        }
+  stage('Deploy to mK8s') {
+    sshagent(['ubuntu-host']) {
+      sh "scp -o StrictHostKeyChecking=no pod-v1.yaml jake@192.168.6.44:/k8s/dev/"
+      try{
+          sh "ssh jake@192.168.6.44 kubectl apply -f ."
       }
+
+      catch(error){
+          echo "Welp... those didnt exist yet"
+          sh "ssh jake@192.168.6.44 kubectl create -f ."
+      }
+    }
+
   }
+
 }
