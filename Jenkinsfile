@@ -87,6 +87,7 @@ node {
         }
       }
 
+
         /*
           Creates slack block messages and uploads violation summary to channel.
 
@@ -102,7 +103,7 @@ node {
                    "type": "section",
                    "text": [
                           "type": "mrkdwn",
-                          "text": "View container details in CBC Console - <https://defense-prod05.conferdeploy.net/kubernetes/repos| here > \nView ${env.JOB_NAME} Build no. ${env.BUILD_NUMBER} - <${env.BUILD_URL}| here > "
+                          "text": "*Container Security details* - <https://defense-prod05.conferdeploy.net/kubernetes/repos| here > \n*${env.JOB_NAME}*-${env.BUILD_NUMBER} - <${env.BUILD_URL}| here > "
                           ]
                   ]
 
