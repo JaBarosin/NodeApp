@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nodeapp
+  namespace: nodeapp
   labels:
     app: nodeapp
 spec:
@@ -24,6 +25,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: nodeapp
   name: nodeapp-service
 spec:
   type: NodePort
