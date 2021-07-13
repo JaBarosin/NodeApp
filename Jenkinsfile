@@ -103,7 +103,7 @@ node {
                    "type": "section",
                    "text": [
                           "type": "mrkdwn",
-                          "text": "*Container Security details* - <https://defense-prod05.conferdeploy.net/kubernetes/repos| here > \n*${env.JOB_NAME}*-${env.BUILD_NUMBER} - <${env.BUILD_URL}| here > "
+                          "text": "*Container Security details:* - <https://defense-prod05.conferdeploy.net/kubernetes/repos| here > \n*${env.JOB_NAME}: *-#${env.BUILD_NUMBER} - <${env.BUILD_URL}| here > "
                           ]
                   ]
 
