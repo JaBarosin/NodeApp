@@ -61,8 +61,7 @@ node {
             }
 
                     echo "Trying to Push Docker Build to DockerHub"
-
-    }
+      }
       /*
           Validate new build with cbctl. Outfiles written include the ${IMAGE}_${NAME}_validate.json and the cbctl_policy_violations.txt
           Tries to validate and send confirmation of no violations.
@@ -71,6 +70,7 @@ node {
       */
 
 // ${REPO}/${IMAGE}:${TAG}
+
     stage('Validate image') {
       try {
         echo "Validate stage... Starting validate test for ${REPO}/${IMAGE}:${TAG}. If there are issues, review ${REPO}_${IMAGE}_validate.json"
@@ -93,7 +93,7 @@ node {
           Comment out this stage if you dont want to send to Slack :(
         */
 
-        stage('Send Validate Results') {
+    stage('Send Validate Results') {
 
           //SLACK_CBCTL = sh 'cat slack_block.txt'
           //echo "Message to send in slack_block: ${SLACK_CBCTL}"
