@@ -94,7 +94,7 @@ node {
           Comment out this stage if you dont want to send to Slack :(
         */
 
-    stage('Send Validate Results') {
+    stage('Slack Post - CB Container Results') {
 
           //SLACK_CBCTL = sh 'cat slack_block.txt'
           //echo "Message to send in slack_block: ${SLACK_CBCTL}"
