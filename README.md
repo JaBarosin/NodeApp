@@ -52,9 +52,9 @@ stage('Validate image') {
 
   **Docker**
 
-      What it's used for? 
+      What it's used for?
 
-      This helps enable the pipeline stages tht use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
+      This helps enable the pipeline stages that use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
 
       How to configure:
 
