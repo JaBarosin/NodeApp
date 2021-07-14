@@ -58,17 +58,11 @@ stage('Validate image') {
       From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/credentials/store/system/domain/_/"
 
       Select "Add Credentials"
-
       Kind: Username with password
-
       Scope: Global
-
       ID: docker-hub
-
       Description: Creds for public docker profile
-
       Username: dockerhub username
-
       Password: dockerhub password
 
 
