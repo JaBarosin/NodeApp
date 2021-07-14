@@ -51,7 +51,10 @@ stage('Validate image') {
 3. **Configure key Plugins**
 
   **Docker**
-      What it's used for: This helps enable the pipeline stages tht use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
+
+      What it's used for? 
+
+      This helps enable the pipeline stages tht use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
 
       How to configure:
 
@@ -68,7 +71,7 @@ stage('Validate image') {
 
   **SSH Agent Plugin**
 
-      What it's used for:
+      What it's used for?
 
       This is used to issue kubectl commands within the Pipeline. The pipeline copies the deployment configs from the Jenkins workspace to K8s host /k8s/dev/ directory.
 
@@ -89,7 +92,7 @@ stage('Validate image') {
 
   **Slack**
 
-    What it's used for:
+    What it's used for?
 
     This is used to send build notification to a slack channel as well as upload a summmary of the cbctl scan/validate results to the slack channel.
 
