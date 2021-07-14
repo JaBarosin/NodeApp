@@ -34,7 +34,7 @@ stage('Validate image') {
   - NOTE: if using the offical Jenkins docker image you will need to create a directory '/var/jenkins_home/app/' and copy the cbctl_validate_helper.py from https://github.com/JaBarosin/jenkins/tree/master/app
 
 
-2. Install additional Jenkins Plugins
+2. **Install additional Jenkins Plugins**
   - Docker Pipeline
   - docker-build-step
   - Groovy
@@ -48,8 +48,9 @@ stage('Validate image') {
   - SSH server
   - Workspace Cleanup Plugin
 
-3. Configure key Plugins
-  - Docker
+3. **Configure key Plugins**
+
+  **Docker**
       What it's used for: This helps enable the pipeline stages tht use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
 
       How to configure:
@@ -71,7 +72,7 @@ stage('Validate image') {
       Password: dockerhub password
 
 
-  - SSH Agent Plugin
+  **SSH Agent Plugin**
 
       What it's used for:
 
@@ -84,20 +85,15 @@ stage('Validate image') {
       Select "Add Credentials"
 
       Kind: SSH Username with private key
-
       Scope: Global
-
       ID: identifier for creds - i.e. cbc-k8shost, microk8s-dev, another label of your liking
-
       Description: CBC container K8s host
-
       Username: ssh username
-
-      Private Key: <if already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
-
+      Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
 
 
-  - Slack
+
+  **Slack**
 
     What it's used for:
 
@@ -109,17 +105,17 @@ stage('Validate image') {
     - Scroll to "Slack" section (likely at the bottom)
 
     Workspace: (name of slack workspace to send messages)
+    Credentials: (select ID of slack creds) This credential is to the bot OAuth Access Token.
 
-    Credentials: (select ID of slack creds) This credential is to the bot OAuth Access Token. If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
+      Note: If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
 
 
-  4. Setup Jenkins Pipeline jobs
+  4. **Setup Jenkins Pipeline jobs**
 
     Job 1 - Docker-Build-pipeline
-
     Job 2 - Microk8s-Deploy
 
-    Job 1 setup:
+    **Job 1 setup**
 
     From Jenkins dashboard:
 
@@ -135,7 +131,7 @@ stage('Validate image') {
           Script Path: Jenkinsfile
 
 
-    Job 2 setup:
+    **Job 2 setup**
 
     From Jenkins dashboard:
 
@@ -144,7 +140,7 @@ stage('Validate image') {
     Select: "Pipeline" and save
     On the Configure Pipeline page
       Build Triggers: Build after other projects are built
-        Select 'Docker-Build-Pipeline' - trigger only if stable >
+        Select 'Docker-Build-Pipeline' - trigger only if stable
         Pipeline section:
           Definition: Pipeline script from scm
             SCM: Git
@@ -155,7 +151,7 @@ stage('Validate image') {
 
 
 
-5. Environment check
+5. **Environment check**
   * Confirm microk8s or other cluster is running on target dev server.
   * Be sure that the directory "/k8s/dev/" exists on the K8s host as that is where the deployment files are copied to from the Jenkins workspace.
   * confirm cbctl is operational on Jenkins docker
