@@ -1,6 +1,6 @@
 # NodeApp
 
-Hey y'all! This is a Demo repo which can be used to get started and test the first few stages of a CI pipeline and include cbctl validate + scan results.
+Hey y'all! This is a Demo repo which can be used to get started and test the stages of a CI pipeline and to demonstrate how CB Container security helps simplify the process of monitoring, alerting, and preventing K8s deployments that violate company policies.
 
 The **Jenkins-docker** server configuration steps can be found here: https://github.com/JaBarosin/jenkins
 
