@@ -56,7 +56,7 @@ stage('Validate image') {
 
   **Docker**
 
-      What it's used for?
+      What is it used for?
 
       This helps enable the pipeline stages that use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
 
@@ -75,7 +75,7 @@ stage('Validate image') {
 
   **SSH Agent Plugin**
 
-      What it's used for?
+      What is it used for?
 
       This is used to issue kubectl commands within the Pipeline. The pipeline copies the deployment configs from the Jenkins workspace to K8s host /k8s/dev/ directory.
 
@@ -96,7 +96,7 @@ stage('Validate image') {
 
   **Slack (Notification, Upload, and Global)**
 
-    What it's used for?
+    What is it used for?
 
     The Slack Plugin allows posts of the pipeline build status to be sent.  
 
@@ -113,7 +113,7 @@ stage('Validate image') {
       Note: If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
 
 
-    The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go! 
+    The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go!
 
   4. **Setup Jenkins Pipeline jobs**
 
