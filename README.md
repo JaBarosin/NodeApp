@@ -30,11 +30,14 @@ stage('Validate image') {
 
 
 **Getting Started**
-1. Clone and install https://github.com/JaBarosin/jenkins or offical Jenkins docker IMAGE
+
+1. **Setup Jenkins**
+  Clone and install https://github.com/JaBarosin/jenkins or offical Jenkins docker IMAGE
   - NOTE: if using the offical Jenkins docker image you will need to create a directory '/var/jenkins_home/app/' and copy the cbctl_validate_helper.py from https://github.com/JaBarosin/jenkins/tree/master/app
 
 
 2. **Install additional Jenkins Plugins**
+  - Credentials Plugin
   - Docker Pipeline
   - docker-build-step
   - Groovy
@@ -42,6 +45,7 @@ stage('Validate image') {
   - Pipeline: Github
   - Pipeline: Github Groovy Libraries
   - Global Slack Notifier Plugin
+  - Slack Notification Plugin
   - Slack Upload Plugin
   - SSH Agent Plugin
   - SSH Buld Agents
@@ -90,11 +94,13 @@ stage('Validate image') {
 
 
 
-  **Slack**
+  **Slack (Notification, Upload, and Global)**
 
     What it's used for?
 
-    This is used to send build notification to a slack channel as well as upload a summmary of the cbctl scan/validate results to the slack channel.
+    The Slack Plugin allows posts of the pipeline build status to be sent.  
+
+    The This is used to send build notification to a slack channel as well as upload a summary of the cbctl scan/validate results to the slack channel.
 
     How to configure:
 
@@ -106,6 +112,8 @@ stage('Validate image') {
 
       Note: If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
 
+
+    The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go! 
 
   4. **Setup Jenkins Pipeline jobs**
 
