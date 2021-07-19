@@ -45,7 +45,7 @@ node {
           docker.image('${REPO}/${IMAGE}:${TAG}').inside {
                   sh 'node --version'
                 }
-
+            sh '/var/jenkins_home/app/cbctl image validate ${REPO}/${IMAGE}:${TAG} -o json'
             echo "Current build lookin: ${currentBuild.currentResult}"
     }
 
