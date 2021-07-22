@@ -15,7 +15,7 @@ node {
         "BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json",
         "REPO=jbarosin",
         "IMAGE=nodeapp",
-        "TAG=dev",
+        "TAG=dev1",
         "CBCTL_RESULTS=testing"]){
 
       /*
@@ -36,7 +36,7 @@ node {
     }
 
 
-    stage('Test image v.1') {
+    stage('Test image v.1.1') {
       /*
          Test stage.  Not much to see here...
       */
@@ -76,6 +76,7 @@ node {
 
 
     }
+
 
 
     stage('Push image') {
