@@ -15,7 +15,7 @@ node {
         "BUILD_NUMBER_SCAN_OUTFILE=cbctl_scan_${currentBuild.number}.json",
         "REPO=jbarosin",
         "IMAGE=nodeapp",
-        "TAG=dev1",
+        "TAG=dev",
         "CBCTL_RESULTS=testing"]){
 
       /*
