@@ -7,7 +7,6 @@ The **Jenkins-docker** server configuration steps can be found here: https://git
 This demo sends alerts to Slack, but plugins to logstash, jira, or wherever you'd like to send a message to can be substituted.  Here are the Slack configuration steps if interested: https://plugins.jenkins.io/slack/#bot-user-mode
 
 Here is a snipit of the stage that is used to run cbctl:
-  - Note: cbctl_validate_helper.py can be found in the above jenkins repo inside the 'app' folder
 
 ```
 stage('Validate image') {
@@ -27,14 +26,17 @@ stage('Validate image') {
   }
 
 ```
+_NOTE: cbctl_validate_helper.py can be found in the above jenkins repo inside the 'app' folder_
 
 
-###Getting Started
 
-**Setup Jenkins**
+### Getting Started
 
-  Clone and install https://github.com/JaBarosin/jenkins or offical Jenkins docker IMAGE
-  NOTE: if using the offical Jenkins docker image you will need to create a directory '/var/jenkins_home/app/' and copy the cbctl_validate_helper.py from https://github.com/JaBarosin/jenkins/tree/master/app
+#### Setup Jenkins
+
+Clone and install https://github.com/JaBarosin/jenkins or offical Jenkins docker IMAGE
+
+NOTE: if using the offical Jenkins docker image you will need to create a directory '/var/jenkins_home/app/' and copy the cbctl_validate_helper.py from https://github.com/JaBarosin/jenkins/tree/master/app
 
 
 **Install additional Jenkins Plugins**
@@ -53,93 +55,93 @@ stage('Validate image') {
   - SSH server
   - Workspace Cleanup Plugin
 
-**Configure key Plugins**
+#### Configure key Plugins
 
-  **Docker**
+##### Docker
 
-      What is it used for?
+_What is it used for?_
 
-      This helps enable the pipeline stages that use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
+This helps enable the pipeline stages that use docker.  In order to push to your own docker repo you will need to add in a username and password for your docker profile.
 
-      How to configure:
+How to configure:
 
-      From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/credentials/store/system/domain/_/"
+From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/credentials/store/system/domain/_/"
 
-      Select "Add Credentials"
-      Kind: Username with password
-      Scope: Global
-      ID: docker-hub
-      Description: Creds for public docker profile
-      Username: dockerhub username
-      Password: dockerhub password
+Select "Add Credentials"
 
-
-  **SSH Agent Plugin**
-
-      What is it used for?
-
-      This is used to issue kubectl commands within the Pipeline. The pipeline copies the deployment configs from the Jenkins workspace to K8s host /k8s/dev/ directory.
-
-      How to configure:
-
-      From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/credentials/store/system/domain/_/"
-
-      Select "Add Credentials"
-
-      Kind: SSH Username with private key
-      Scope: Global
-      ID: identifier for creds - i.e. cbc-k8shost, microk8s-dev, another label of your liking
-      Description: CBC container K8s host
-      Username: ssh username
-      Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
+- Kind: Username with password
+- Scope: Global
+- ID: ```docker-hub```
+- Description: Creds for public docker profile
+- Username: ```dockerhub username```
+- Password: ```dockerhub password```
 
 
+### SSH Agent Plugin
 
-  **Slack (Notification, Upload, and Global)**
+_What is it used for?_
 
-    What is it used for?
+This is used to issue kubectl commands within the Pipeline. The pipeline copies the deployment configs from the Jenkins workspace to K8s host /k8s/dev/ directory.
 
-    The Slack Plugin allows posts of the pipeline build status to be sent.  
+##### How to configure
 
-    The This is used to send build notification to a slack channel as well as upload a summary of the cbctl scan/validate results to the slack channel.
+From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/credentials/store/system/domain/_/"
 
-    How to configure:
+Select "Add Credentials"
 
-    - Navigate to Jenkins Dashboard > Manage Jenkins > Configure System
-    - Scroll to "Slack" section (likely at the bottom)
+Kind: SSH Username with private key
+Scope: Global
+ID: ```identifier for creds``` - i.e. cbc-k8shost, microk8s-dev, another label of your liking
+Description: CBC container K8s host
+Username: ```ssh username```
+Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
 
-    Workspace: (name of slack workspace to send messages)
-    Credentials: (select ID of slack creds) This credential is to the bot OAuth Access Token.
 
-      Note: If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
+### Slack (Notification, Upload, and Global)
 
+_What is it used for?_
 
-    The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go!
+The Slack Plugin allows posts of the pipeline build status to be sent.  
 
-  **Setup Jenkins Pipeline jobs**
+The This is used to send build notification to a slack channel as well as upload a summary of the cbctl scan/validate results to the slack channel.
 
-    Job 1 - Docker-Build-pipeline
-    Job 2 - Microk8s-Deploy
+How to configure:
 
-##### Build Job setup
+- Navigate to Jenkins Dashboard > Manage Jenkins > Configure System
+- Scroll to "Slack" section (likely at the bottom)
 
-    From Jenkins dashboard:
+Workspace: ```(name of slack workspace to send messages)```
+Credentials: ```(select ID of slack creds) This credential is to the bot OAuth Access Token```
 
-    Select "New Item"
-    Name: "Docker-Build-Pipeline"
-    Select: "Pipeline" and save
-    On the Configure Pipeline page Pipeline section:
-        Definition: Pipeline script from scm
-          SCM: Git
-            Repositories - Repository URL: https://github.com/JaBarosin/NodeApp.git
-            Credentials: None
-            Branches to build: master
-          Script Path: Jenkinsfile
+Note: If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
+
+The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go!
+
+**Setup Jenkins Pipeline jobs**
+
+Phase 1 - Docker-Build-pipeline
+Phase 2 - Microk8s-Deploy Jobs
+
+---
+
+### Setting up Jenkins Jobs
+
+From Jenkins dashboard
+
+Select ```New Item```
+Name: ```Docker-Build-Pipeline```
+Select ```Pipeline``` and save
+On the Configure Pipeline page Pipeline section:
+- Definition: ```Pipeline script from scm```
+- SCM: Git
+- Repositories - Repository URL: https://github.com/JaBarosin/NodeApp.git
+  - Credentials: None
+  - Branches to build: master
+  - Script Path: Jenkinsfile
 
 ##### Deploy Job Setup
 
-    Follow ***https://github.com/JaBarosin/K8sConfigs/tree/main*** for the setup of deployment jobs
-
+Follow **https://github.com/JaBarosin/K8sConfigs/tree/main** for the setup of Phase 2 deployment jobs
 
 
 **Environment check**
