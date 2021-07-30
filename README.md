@@ -28,7 +28,7 @@ stage('Validate image') {
 ```
 _NOTE: cbctl_validate_helper.py can be found in the above jenkins repo inside the 'app' folder_
 
-
+---
 
 ### Getting Started
 
@@ -90,10 +90,15 @@ From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/cre
 Select "Add Credentials"
 
 Kind: SSH Username with private key
+
 Scope: Global
+
 ID: ```identifier for creds``` - i.e. cbc-k8shost, microk8s-dev, another label of your liking
+
 Description: CBC container K8s host
+
 Username: ```ssh username```
+
 Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
 
 
@@ -101,9 +106,7 @@ Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh
 
 _What is it used for?_
 
-The Slack Plugin allows posts of the pipeline build status to be sent.  
-
-The This is used to send build notification to a slack channel as well as upload a summary of the cbctl scan/validate results to the slack channel.
+These three Slack Plugin allows posts of the pipeline build status to be sent as well as upload a log of the cbctl scan/validate results to the slack channel.
 
 How to configure:
 
@@ -111,27 +114,32 @@ How to configure:
 - Scroll to "Slack" section (likely at the bottom)
 
 Workspace: ```(name of slack workspace to send messages)```
+
 Credentials: ```(select ID of slack creds) This credential is to the bot OAuth Access Token```
 
 Note: If you do not have access to an existing workspace/bot -  https://github.com/jenkinsci/slack-plugin#bot-user-mode
 
 The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go!
 
-**Setup Jenkins Pipeline jobs**
-
-Phase 1 - Docker-Build-pipeline
-Phase 2 - Microk8s-Deploy Jobs
 
 ---
 
 ### Setting up Jenkins Jobs
 
-From Jenkins dashboard
+Phase 1 - Docker-Build-pipeline
+
+Phase 2 - Microk8s-Deploy Jobs
+
+**From Jenkins dashboard**
 
 Select ```New Item```
+
 Name: ```Docker-Build-Pipeline```
+
 Select ```Pipeline``` and save
+
 On the Configure Pipeline page Pipeline section:
+
 - Definition: ```Pipeline script from scm```
 - SCM: Git
 - Repositories - Repository URL: https://github.com/JaBarosin/NodeApp.git
@@ -139,7 +147,7 @@ On the Configure Pipeline page Pipeline section:
   - Branches to build: master
   - Script Path: Jenkinsfile
 
-##### Deploy Job Setup
+#### Deploy Job Setup
 
 Follow **https://github.com/JaBarosin/K8sConfigs/tree/main** for the setup of Phase 2 deployment jobs
 
