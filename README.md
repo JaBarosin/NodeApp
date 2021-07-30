@@ -89,17 +89,12 @@ From your Jenkins console, navigate to "http://<insert-your-jenkins-ip>:8080/cre
 
 Select "Add Credentials"
 
-Kind: SSH Username with private key
-
-Scope: Global
-
-ID: ```identifier for creds``` - i.e. cbc-k8shost, microk8s-dev, another label of your liking
-
-Description: CBC container K8s host
-
-Username: ```ssh username```
-
-Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
+- Kind: SSH Username with private key
+- Scope: Global
+- ID: ```identifier for creds``` - i.e. cbc-k8shost, microk8s-dev, another label of your liking
+- Description: CBC container K8s host
+- Username: ```ssh username```
+- Private Key: If already created then copy into Jenkins UI. If no keys in '~/.ssh/' then create a new SSH key. https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu
 
 
 ### Slack (Notification, Upload, and Global)
@@ -127,16 +122,13 @@ The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl t
 ### Setting up Jenkins Jobs
 
 Phase 1 - Docker-Build-pipeline
-
 Phase 2 - Microk8s-Deploy Jobs
 
 **From Jenkins dashboard**
 
-Select ```New Item```
-
-Name: ```Docker-Build-Pipeline```
-
-Select ```Pipeline``` and save
+- Select ```New Item```
+- Name: ```Docker-Build-Pipeline```
+- Select ```Pipeline``` and save
 
 On the Configure Pipeline page Pipeline section:
 
