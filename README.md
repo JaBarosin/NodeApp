@@ -147,6 +147,3 @@ stage('Validate image') {
   * Be sure that the directory "/k8s/dev/" exists on the K8s host as that is where the deployment files are copied to from the Jenkins workspace.
   * confirm cbctl is operational on Jenkins docker
     * once copied to Jenkins docker, be sure to apply the cbctl_default configurations.
-
-
-6. Profit
