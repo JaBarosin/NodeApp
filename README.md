@@ -101,7 +101,7 @@ Select "Add Credentials"
 
 _What is it used for?_
 
-These three Slack Plugin allows posts of the pipeline build status to be sent as well as upload a log of the cbctl scan/validate results to the slack channel.
+These three Slack Plugin enable build status posts of the pipeline to be sent as well as upload a log of the cbctl scan/validate results to the slack channel.
 
 How to configure:
 
