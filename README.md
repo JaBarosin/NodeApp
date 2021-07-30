@@ -29,14 +29,15 @@ stage('Validate image') {
 ```
 
 
-**Getting Started**
+###Getting Started
 
-1. **Setup Jenkins**
+**Setup Jenkins**
+
   Clone and install https://github.com/JaBarosin/jenkins or offical Jenkins docker IMAGE
-  - NOTE: if using the offical Jenkins docker image you will need to create a directory '/var/jenkins_home/app/' and copy the cbctl_validate_helper.py from https://github.com/JaBarosin/jenkins/tree/master/app
+  NOTE: if using the offical Jenkins docker image you will need to create a directory '/var/jenkins_home/app/' and copy the cbctl_validate_helper.py from https://github.com/JaBarosin/jenkins/tree/master/app
 
 
-2. **Install additional Jenkins Plugins**
+**Install additional Jenkins Plugins**
   - Credentials Plugin
   - Docker Pipeline
   - docker-build-step
@@ -52,7 +53,7 @@ stage('Validate image') {
   - SSH server
   - Workspace Cleanup Plugin
 
-3. **Configure key Plugins**
+**Configure key Plugins**
 
   **Docker**
 
@@ -115,12 +116,12 @@ stage('Validate image') {
 
     The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl to the slack channel.  Once the credentials are setup within Jenkins this should be good to go!
 
-  4. **Setup Jenkins Pipeline jobs**
+  **Setup Jenkins Pipeline jobs**
 
     Job 1 - Docker-Build-pipeline
     Job 2 - Microk8s-Deploy
 
-    **Job 1 setup**
+##### Build Job setup
 
     From Jenkins dashboard:
 
@@ -135,28 +136,13 @@ stage('Validate image') {
             Branches to build: master
           Script Path: Jenkinsfile
 
+##### Deploy Job Setup
 
-    **Job 2 setup**
-
-    From Jenkins dashboard:
-
-    Select: "New Item"
-    Name: "Microk8s-Deploy"
-    Select: "Pipeline" and save
-    On the Configure Pipeline page
-      Build Triggers: Build after other projects are built
-        Select 'Docker-Build-Pipeline' - trigger only if stable
-        Pipeline section:
-          Definition: Pipeline script from scm
-            SCM: Git
-              Repositories - Repository URL: https://github.com/JaBarosin/K8sConfigs.git
-              Credentials: None
-              Branches to build: main
-              Script Path: Jenkinsfile
+    Follow ***https://github.com/JaBarosin/K8sConfigs/tree/main*** for the setup of deployment jobs
 
 
 
-5. **Environment check**
+**Environment check**
   * Confirm microk8s or other cluster is running on target dev server.
   * Be sure that the directory "/k8s/dev/" exists on the K8s host as that is where the deployment files are copied to from the Jenkins workspace.
   * confirm cbctl is operational on Jenkins docker
