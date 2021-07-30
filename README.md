@@ -124,7 +124,7 @@ The Slack Upload step is used in the Jenkinsfile to upload the logs from cbctl t
 Phase 1 - Docker-Build-pipeline
 Phase 2 - Microk8s-Deploy Jobs
 
-**From Jenkins dashboard**
+#### Docker Build Job
 
 - Select ```New Item```
 - Name: ```Docker-Build-Pipeline```
