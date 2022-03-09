@@ -41,13 +41,13 @@ node {
            Test stage.  Not much to see here...
            Requires the Docker Pipeline plugin to be installed
         */
-        stage('Test image v.1') {
+//         stage('Test image v.1') {
 
-      	  docker.image('${REPO}/${IMAGE}:${TAG}').inside {
-      		  sh 'node --version'
-      		}
-    	    echo "Current build lookin: ${currentBuild.currentResult}"
-        }
+//       	  docker.image('${REPO}/${IMAGE}:${TAG}').inside {
+//       		  sh 'node --version'
+//       		}
+//     	    echo "Current build lookin: ${currentBuild.currentResult}"
+//         }
 
         /*
           Docker credentials need to be setup in Jenkins.
