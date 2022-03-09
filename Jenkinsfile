@@ -109,4 +109,3 @@ node {
             sh 'mv cbctl_policy_violations.txt cbctl_policy_violations_old.txt'
         }
 }
-}
